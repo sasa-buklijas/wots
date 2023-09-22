@@ -1,6 +1,6 @@
 from browser import document, html
-from browser.widgets.dialog import InfoDialog
 import json
+
 
 with open('categories.json') as file:
     categories = json.load(file)
@@ -8,29 +8,67 @@ with open('categories.json') as file:
 with open('all_data.json') as file:
     all_data = json.load(file)
 
+def test_f(event):
+    #print(f'#### {event=}')
+    #data = document["id"]
+    print(f'JE LI OVO LINK {event.target.attrs["link"]}')
+    #print(f'#### {dir(event.target)=}')
+
+    link = event.target.attrs["link"]
+    url = link.split('?')[0]
+    start_time = link.split('=')[1]
+    #new_link = f'{url}{}'
+
+    # ovo radi OK
+    document["zone3"] <= html.IFRAME(width="560", height="315",
+                        src="https://www.youtube.com/embed/lJIrF4YjHfQ?si=1C2UrN_gAvQZQV2y&amp;start=11"
+                        ,title="YouTube video player" 
+                        ,frameborder="0" 
+                        ,allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        )
+
 def show(event):
-    dropdown = event.target
-    num = dropdown.selectedIndex
-    #InfoDialog("Demo", "Selected: {}".format(dropdown.options[num].text))
-    #InfoDialog("Demo2", "Selected: {}".format(dropdown.value))
+    print(f'{event=}')
+    if event == None: # just hack to call on load
+        category_id = 'a'
+        #num = 0
+    else:
+        dropdown = event.target
+        category_id = dropdown.value 
+        #num = dropdown.selectedIndex
+        #category_name = dropdown.options[num].text
 
-    category_id = dropdown.value 
-    category_name = dropdown.options[num].text
-    #InfoDialog("Demo3", f"Selected: {category_id} {category_name}")
+    
+    #dropdown = event.target
+    #num = dropdown.selectedIndex
+    #category_id = dropdown.value 
+    #category_name = dropdown.options[num].text
 
-    #document["zone2"] <= html.BR()
-
-    # delete old 
+    # delete old questions
     document["zone2"].textContent = ""  
 
     for qs, ql, link, cat in all_data:
         if category_id in cat:  
-            document["zone2"] <= html.BR()
-            #document["zone2"] <= qs
-            # need button
-            document["zone2"] <= html.A(qs, href=link, target="_blank")
+            # old way, just link separated by new line
+            #document["zone2"] <= html.BR()
+            #document["zone2"] <= html.A(qs, href=link, target="_blank")
 
+            # Create a new row
+            new_row = html.TR()
+            # Create a cell (TD) element to wrap the anchor element
+            cell = html.TD()
+            anchor_element = html.A(qs, href=link, target="_blank")
+
+            # test for embed youtube
+            #anchor_element = html.A(qs, link=link)
+            #anchor_element.bind('click', test_f)
             
+            # Add the anchor element to the cell
+            cell <= anchor_element
+            # Add the cell to the new row
+            new_row <= cell
+            document["zone2"] <= new_row
+
             # ovo radi OK
             #document["zone2"] <= html.IFRAME(width="560", height="315",
             #                    src="https://www.youtube.com/embed/hSHFd4FJAxs?start=1527" 
@@ -41,25 +79,19 @@ def show(event):
 
 
 def insert_dropdown():
-    document["zone1"] <= "Select category: "
-    #dropdown = html.SELECT(
-    #    html.OPTION(v, value=k) for k, v in categories.items())
-    
     #dropdown = html.SELECT(style={'height':100, 'width':200})
-    #font-size: 16px
-    dropdown = html.SELECT(style={'font-size':'3vh'})
+    #dropdown = html.SELECT(style={'font-size':'3vh'})
+    
+    #dropdown = html.SELECT()
+    dropdown = html.SELECT(Class="form-select", id="category")
     for k, v in categories.items():
         dropdown <= html.OPTION(v, value=k) 
-
+    #dropdown.class_name = 'form-select' # set class separately
 
     dropdown.bind("change", show)
     document["zone1"] <= dropdown
-    document["zone1"] <= html.HR()
-    
 
-#document <= html.BR()
-#document <= "Hello before dropdown"
 
 insert_dropdown()
-#document <= html.BR()
-#document <= "Hello After Dropdown "
+show(None)  # just hack to call on load
+
