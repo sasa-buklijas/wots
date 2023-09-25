@@ -2,11 +2,12 @@ from browser import document, html
 import json
 
 
+# get data from json file
 with open('categories.json') as file:
     categories = json.load(file)
-
 with open('all_data.json') as file:
     all_data = json.load(file)
+
 
 def test_f(event):
     #print(f'#### {event=}')
@@ -27,8 +28,10 @@ def test_f(event):
                         ,allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         )
 
+
+# called every time when dropdown is changed 
 def show(event):
-    print(f'{event=}')
+    #print(f'{event=}')
     if event == None: # just hack to call on load
         category_id = 'a'
         category_text = 'Other traditions'
@@ -40,12 +43,13 @@ def show(event):
 
     
     #dropdown = event.target
-    #num = dropdown.selectedIndex
     #category_id = dropdown.value 
+    #num = dropdown.selectedIndex
     #category_name = dropdown.options[num].text
 
     # delete old questions
     document["zone2"].textContent = ""  
+    # update header with selected category
     document["question_title"].textContent = f'Questions for category - "{category_text}":'  
 
     counter = 0
@@ -91,18 +95,14 @@ def show(event):
             #                    )
 
 
+# called only once to update dropdown list
 def insert_dropdown():
-    #dropdown = html.SELECT(style={'height':100, 'width':200})
-    #dropdown = html.SELECT(style={'font-size':'3vh'})
-    
-    #dropdown = html.SELECT()
-    dropdown = html.SELECT(Class="form-select", id="category")
+    dropdown = document["category"] # key(k) is index, value(v) is text
+
     for k, v in categories.items():
         dropdown <= html.OPTION(v, value=k) 
-    #dropdown.class_name = 'form-select' # set class separately
 
     dropdown.bind("change", show)
-    document["zone1"] <= dropdown
 
 
 insert_dropdown()
