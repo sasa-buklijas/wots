@@ -25,3 +25,5 @@ Example on: [https://buklijas.info/apps/wots/index.html](https://buklijas.info/a
 Full text search of 1000 questions in real time(as you type), regardless lower or upper case with highlight of searched text (even multiple highlight  in same question).  
 Clicking on question you are redirected to Youtube video.  
 Example on: [https://buklijas.info/apps/wots/search.html](https://buklijas.info/apps/wots/search.html)   
+   
+[https://buklijas.info/apps/wots/search_fullscreen.html](https://buklijas.info/apps/wots/search_fullscreen.html) will open youtube video in same page, no redirect needed.
